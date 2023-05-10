@@ -1,76 +1,127 @@
-import React, { useState } from 'react'
 import Base from '../Base/Base'
 import { useHistory } from 'react-router-dom'
+import * as yup from 'yup'
+import { useFormik } from 'formik';
+import { Button, TextField } from '@mui/material';
 
+export const filedValidationSchema = yup.object({
+  name: yup.string().required("Please fill in teachers name"),
+  batch: yup.string().required("Please fill in teachers batch").min(5, "Please pass a valid batchname"),
+  gender: yup.string().required("Please specify your gender"),
+  qualification: yup.string().required("Please fill in teacher qualification")
 
+});
 
- //Function
+//Function
 
-function AddTeachers({teachers, setTeachers}) {
+function AddTeachers({ teachers, setTeachers }) {
+  const { handleSubmit, values, handleChange, handleBlur, touched, errors } = useFormik({
+    initialValues: {
+      name: "",
+      batch: "",
+      gender: "",
+      qualification: "",
+    },
+    validationSchema: filedValidationSchema,
+    onSubmit: (newStudentData) => {
+      console.log("onsubmit", newStudentData);
+      createStudent(newStudentData)
+    },
+
+  })
+
   const history = useHistory()
-    const [name, setName] = useState("")
-    const [batch, setBatch] = useState("")
-    const [gender, setGender] = useState("")
-    const [qualification, setQualification] = useState("")
+  //const [name, setName] = useState("")
+  //const [batch, setBatch] = useState("")
+  //const [gender, setGender] = useState("")
+  //const [qualification, setQualification] = useState("")
 
-const createStudent = async () =>{
+  const createStudent = async (newStudents) => {
     // creating object from input states
-    const newStudents = {
-      name:name,
-      batch:batch,
-      qualification:qualification,
-      gender: gender,
-}
+    //const newStudents = {
+    //name:name,
+    //batch:batch,
+    //qualification:qualification,
+    //gender: gender,
+    //}
 
-const response = await fetch("https://6454e410a74f994b334bcd96.mockapi.io/teachers", {
-  method:"POST",
-  body:JSON.stringify(newStudents),
-  headers :{
-    "Content-Type":"application/json"
-  },
-})
-const datas= await response.json()
-  setTeachers([...teachers, datas])
-  history.push("/teachers")
-}
+    const response = await fetch("https://6454e410a74f994b334bcd96.mockapi.io/teachers", {
+      method: "POST",
+      body: JSON.stringify(newStudents),
+      headers: {
+        "Content-Type": "application/json"
+      },
+    })
+    const datas = await response.json()
+    setTeachers([...teachers, datas])
+    history.push("/teachers")
+  }
 
   return (
     <Base
-    title={"Add New Teachers"}
-    description={"We can able to add new teachers data here"}
+      title={"Add New Teachers"}
+      description={"We can able to add new teachers data here"}
     >
-    <div>
-        <input
-        placeholder='Enter Name'
-        type ="text"
-        value = {name}
-        onChange={(e)=>setName(e.target.value)}
-        />
-        <input
-        placeholder='Enter Batch'
-        type ="text"
-        value ={batch}
-        onChange={(e)=>setBatch(e.target.value)}
-        />
+      <div className='text-area-col'>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            name='name'
+            fullWidth sx={{ m: 1 }}
+            label="Name"
+            variant="filled"
+            type="name"
+            onBlur={handleBlur}
+            value={values.name}
+            onChange={handleChange} />
 
-        <input
-        placeholder='Enter Gender'
-        type ="text"  
-        value ={gender}
-        onChange={(e)=>setGender(e.target.value)}
-        />
+          <div style={{ color: "crimson" }}>
+            {touched.name && errors.name ? errors.name : ""}
+          </div>
 
-        <input
-        placeholder='Enter Qualification'
-        type ="text" 
-        value= {qualification}
-        onChange={(e)=>setQualification(e.target.value)}
-        />
+          <TextField
+            name='batch'
+            fullWidth sx={{ m: 1 }}
+            label="Batch"
+            variant="filled"
+            type="batch"
+            onBlur={handleBlur}
+            value={values.batch}
+            onChange={handleChange} />
+          <div style={{ color: "crimson" }}>
+            {touched.batch && errors.batch ? errors.batch : ""}
+          </div>
 
-        <button 
-        onClick={createStudent}
-        >Add Teachers</button>
-    </div>
+          <TextField
+            name='gender'
+            fullWidth sx={{ m: 1 }}
+            label="Gender"
+            variant="filled"
+            type="gender"
+            onBlur={handleBlur}
+            value={values.gender}
+            onChange={handleChange} />
+          <div style={{ color: "crimson" }}>
+            {touched.gender && errors.gender ? errors.gender : ""}
+          </div>
+
+          <TextField
+            name='qualification'
+            fullWidth sx={{ m: 1 }}
+            label="qualification"
+            variant="filled"
+            type="qualification"
+            onBlur={handleBlur}
+            value={values.qualification}
+            onChange={handleChange} />
+          <div style={{ color: "crimson" }}>
+            {touched.qualification && errors.qualification ? errors.qualification : ""}
+          </div>
+
+          <Button
+            type='submit'
+            variant="contained">Add Teachers</Button>
+        </form>
+      </div>
     </Base>
   )
 }

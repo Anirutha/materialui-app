@@ -16,12 +16,14 @@
   }
    
   .main-segment{
+    
     width: 100%;
     text-align: center;
     height: 75%;
   }
   
   .child-component{
+    
     margin: 24px;
   }
    

@@ -4,10 +4,10 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 //function
 function Students({ students, setStudents }) {
@@ -27,16 +27,11 @@ function Students({ students, setStudents }) {
     }
   }
 
-
   return (
     <Base
       title={"Students Dashboard"}
       description={"The page contains all students data"}
     >
-
-
-
-
       <div className='card-container'>
         {students.map((stud, idx) => (
           <Card sx={{ maxWidth: 200, height: 220 }} key={idx}>
@@ -55,17 +50,20 @@ function Students({ students, setStudents }) {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={() => history.push(`/edit/${stud.id}`)}  >edit</Button>
-              <Button size="small" onClick={() => deleteStudent(stud.id)}>delete</Button>
+              <Button
+                size="small"
+                onClick={() => history.push(`/edit/${idx}`)}>
+                <EditIcon />
+              </Button>
+              <Button
+                size="small"
+                onClick={() => deleteStudent(stud.id)}>
+                <DeleteIcon />
+              </Button>
             </CardActions>
           </Card>
-
-
-
-
         ))}
       </div>
-
     </Base>
   )
 }
