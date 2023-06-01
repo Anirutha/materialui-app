@@ -15,46 +15,29 @@ export const filedValidationSchema = yup.object({
 
 //function
 function UpdateTeachers({ teachers, setTeachers }) {
+  const { id } = useParams();
+  const editTeachers = teachers[id]
+  const history = useHistory();
   const { handleSubmit, values, handleChange, handleBlur, touched, errors } = useFormik({
     initialValues: {
-      name: "",
-      batch: "",
-      gender: "",
-      qualification: "",
+      name: editTeachers.name,
+      batch: editTeachers.batch,
+      gender: editTeachers.gender,
+      qualification: editTeachers.qualification,
+      id:id
     },
     validationSchema: filedValidationSchema,
-    onSubmit: (newStudentData) => {
-      console.log("onsubmit", newStudentData);
-      UpdateTeachers(newStudentData)
+    onSubmit: (updStudentData) => {
+      console.log("onsubmit", updStudentData);
+      updateTeachers(updStudentData)
     },
 
   })
 
-  const { id } = useParams();
-  const editTeachers = teachers[id]
-  const history = useHistory();
-  //const [name, setName] = useState("")
-  //const [batch, setBatch] = useState("")
-  //const [gender, setGender] = useState("")
-  //const [qualification, setQualification] = useState("")
-
-  //useEffect(()=>{
-  //setName(editTeachers.name)
-  //setBatch(editTeachers.batch)
-  //setGender(editTeachers.gender)
-  //setQualification(editTeachers.qualification)
-  //}, [editTeachers])
-
-  async function UpdateTeachers() {
-    //const updatedObject = {
-    //name : name,
-    //batch : batch,
-    //gender: gender,
-    //qualification :qualification
-    //}
+async function updateTeachers(updaStudents) {
     const response = await fetch(`https://6454e410a74f994b334bcd96.mockapi.io/teachers/${editTeachers.id}`, {
       method: "PUT",
-      body: JSON.stringify(handleChange),
+      body: JSON.stringify(updaStudents),
       headers: {
         "Content-Type": "application/json"
       }
@@ -62,9 +45,7 @@ function UpdateTeachers({ teachers, setTeachers }) {
 
     const data = await response.json()
     if (data) {
-      //console.log(updatedObject)
-      //teachers[id] = updatedObject
-      teachers[id] = handleChange
+      teachers[id] = updaStudents
       setTeachers([...teachers])
       history.push("/teachers")
     }
@@ -131,7 +112,7 @@ function UpdateTeachers({ teachers, setTeachers }) {
           </div>
 
           <Button
-            onClick={UpdateTeachers}
+            type='submit'
             variant="contained">Update Teachers</Button>
         </form>
       </div>

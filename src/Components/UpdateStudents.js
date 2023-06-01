@@ -5,6 +5,7 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import { Button, TextField } from '@mui/material';
 
+
 export const filedValidationSchema = yup.object({
   name: yup.string().required("Please fill in students name"),
   batch: yup.string().required("Please fill in students batch").min(5, "Please pass a valid batchname"),
@@ -15,12 +16,16 @@ export const filedValidationSchema = yup.object({
 
 //function
 function UpdateStudents({ students, setStudents }) {
+  const { id } = useParams();
+  const editStudent = students[id]
+  const history = useHistory();
   const { handleSubmit, values, handleChange, handleBlur, touched, errors } = useFormik({
     initialValues: {
-      name: "",
-      batch: "",
-      gender: "",
-      qualification: "",
+      name: editStudent.name,
+      batch: editStudent.batch,
+      gender: editStudent.gender,
+      qualification: editStudent.qualification,
+      id:id
     },
     validationSchema: filedValidationSchema,
     onSubmit: (updStudentData) => {
@@ -30,29 +35,7 @@ function UpdateStudents({ students, setStudents }) {
 
   })
 
-  const { id } = useParams();
-  const editStudent = students[id]
-  const history = useHistory();
-
-  //const [name, setName] = useState("")
-  //const [batch, setBatch] = useState("")
-  //const [gender, setGender] = useState("")
-  //const [qualification, setQualification] = useState("")
-
-  //useEffect(()=>{
-  //setName(editStudent.name)
-  //setBatch(editStudent.batch)
-  //setGender(editStudent.gender)
-  //setQualification(editStudent.qualification)
-  //}, [editStudent])
-
   async function updateStudent(updaStudents) {
-    //const updatedObject = {
-    //name : name,
-    //batch : batch,
-    //gender: gender,
-    //qualification :qualification
-    //}
     const response = await fetch(`https://644b33bc4bdbc0cc3a8ce28c.mockapi.io/users/${editStudent.id}`, {
       method: "PUT",
       body: JSON.stringify(updaStudents),
@@ -63,9 +46,7 @@ function UpdateStudents({ students, setStudents }) {
 
     const data = await response.json()
     if (data) {
-      //console.log(updatedObject)
-      //students[id] = updatedObject 
-      students[id] = editStudent
+      students[id] = updaStudents
       setStudents([...students])
       history.push("/students")
     }

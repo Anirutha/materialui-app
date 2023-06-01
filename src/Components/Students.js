@@ -10,7 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 //function
-function Students({ students, setStudents }) {
+function Students({ students, setStudents}) {
   const history = useHistory();
   // delete functionality
   const deleteStudent = async (studId) => {
@@ -52,7 +52,7 @@ function Students({ students, setStudents }) {
             <CardActions>
               <Button
                 size="small"
-                onClick={() => history.push(`/edit/${idx}`)}>
+                onClick={() => history.push(`/edit/${stud.id}`)}>
                 <EditIcon />
               </Button>
               <Button

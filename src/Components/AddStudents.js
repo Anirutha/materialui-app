@@ -31,20 +31,7 @@ function AddStudents({ students, setStudents }) {
   })
 
   const history = useHistory()
-  //const [name, setName] = useState("")
-  //const [batch, setBatch] = useState("")
-  //const [gender, setGender] = useState("")
-  //const [qualification, setQualification] = useState("")
-
   const createStudent = async (newStudents) => {
-    // creating object from input states
-    //const newStudents = {
-    //name: name,
-    //batch: batch,
-    //qualification: qualification,
-    //gender: gender,
-    //}
-
     const response = await fetch("https://644b33bc4bdbc0cc3a8ce28c.mockapi.io/users", {
       method: "POST",
       body: JSON.stringify(newStudents),
